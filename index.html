@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Stopwatch - PRODIGY_WD_02</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Stopwatch</h1>
+            <button id="themeToggle" class="theme-toggle">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </div>
+        
+        <div class="stopwatch">
+            <div class="display">
+                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>.<span id="milliseconds">00</span>
+            </div>
+ 
+            <div class="controls">
+                <button id="startBtn"><i class="fas fa-play"></i> Start</button>
+                <button id="pauseBtn" disabled><i class="fas fa-pause"></i> Pause</button>
+                <button id="stopBtn" disabled><i class="fas fa-stop"></i> Stop</button>
+                <button id="lapBtn" disabled><i class="fas fa-flag"></i> Lap</button>
+                <button id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
+                <button id="resetBtn"><i class="fas fa-redo"></i> Reset</button>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span>Laps</span>
+                    <span id="totalLaps">0</span>
+                </div>
+                <div class="stat-card">
+                    <span>Fastest</span>
+                    <span id="fastestLap">00:00:00.00</span>
+                </div>
+                <div class="stat-card">
+                    <span>Slowest</span>
+                    <span id="slowestLap">00:00:00.00</span>
+                </div>
+            </div>
+            
+            <div class="laps" id="lapsContainer">
+                <h3>Lap Times</h3>
+                <ul id="lapsList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio elements for sound effects -->
+    <audio id="startSound" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3"></audio>
+    <audio id="lapSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+    <audio id="resetSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
