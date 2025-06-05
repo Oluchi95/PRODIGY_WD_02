@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
     const millisecondsElement = document.getElementById('milliseconds');
-    const startBtn = document.getElementById('startBtn');
+    const startResumeBtn = document.getElementById('startResumeBtn');
     const pauseBtn = document.getElementById('pauseBtn');
     const stopBtn = document.getElementById('stopBtn');
     const lapBtn = document.getElementById('lapBtn');
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let elapsedTime = 0;
     let timerInterval;
     let isRunning = false;
+    let isPaused = false;
     let lapCount = 0;
     let laps = [];
     let fastestLap = null;
@@ -93,9 +94,19 @@ document.addEventListener('DOMContentLoaded', function() {
         hoursElement.textContent = formatTime(time.hours);
     }
 
-    // Start the stopwatch
-    function startTimer() {
-        if (!isRunning) {
+    // Update button states
+    function updateButtonStates() {
+        startResumeBtn.disabled = isRunning;
+        pauseBtn.disabled = !isRunning;
+        stopBtn.disabled = !isRunning;
+        lapBtn.disabled = !isRunning;
+        resetBtn.disabled = isRunning;
+    }
+
+    // Start or Resume the stopwatch
+    function startResumeTimer() {
+        if (!isRunning && !isPaused) {
+            // Initial start
             startSound.play();
             startTime = Date.now() - elapsedTime;
             timerInterval = setInterval(() => {
@@ -103,36 +114,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateDisplay();
             }, 10);
             isRunning = true;
+            isPaused = false;
             
-            // Update button states
-            startBtn.disabled = true;
-            pauseBtn.disabled = false;
-            stopBtn.disabled = false;
-            lapBtn.disabled = false;
-            resetBtn.disabled = true;
+            startResumeBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+            updateButtonStates();
+        } else if (!isRunning && isPaused) {
+            // Resuming from pause
+            startSound.play();
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(() => {
+                elapsedTime = Date.now() - startTime;
+                updateDisplay();
+            }, 10);
+            isRunning = true;
+            isPaused = false;
+            
+            updateButtonStates();
         }
     }
 
+    // Pause the stopwatch
     function pauseTimer() {
         clearInterval(timerInterval);
         isRunning = false;
+        isPaused = true;
         
-        // Update button states
-        pauseBtn.disabled = true;
-        startBtn.disabled = false;
+        // Change Start button to Resume
+        startResumeBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+        updateButtonStates();
     }
+
     // Stop the stopwatch
     function stopTimer() {
         resetSound.play();
         clearInterval(timerInterval);
         isRunning = false;
+        isPaused = false;
         
-        // Update button states
-        startBtn.disabled = false;
-        pauseBtn.disabled = true;
-        stopBtn.disabled = true;
-        lapBtn.disabled = true;
-        resetBtn.disabled = false;
+        // Reset Start/Resume button
+        startResumeBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+        updateButtonStates();
     }
 
     // Reset the stopwatch
@@ -150,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function() {
         slowestLapElement.textContent = '00:00:00.00';
         lapsList.innerHTML = '';
     }
-
 
     // Record a lap time
     function recordLap() {
@@ -213,8 +233,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.removeChild(link);
     }
 
+    // Initialize button states
+    updateButtonStates();
+
     // Event Listeners
-    startBtn.addEventListener('click', startTimer);
+    startResumeBtn.addEventListener('click', startResumeTimer);
     pauseBtn.addEventListener('click', pauseTimer);
     stopBtn.addEventListener('click', stopTimer);
     resetBtn.addEventListener('click', resetTimer);

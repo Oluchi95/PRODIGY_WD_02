@@ -133,14 +133,18 @@ button:disabled:hover {
     transform: translateY(-2px);
 }
 
-#startBtn {
+#startResumeBtn {
     background-color: var(--primary-color);
     color: white;
 }
 
-#startBtn:hover {
+#startResumeBtn:hover {
     filter: brightness(0.9);
     transform: translateY(-2px);
+}
+
+#startResumeBtn.resume-mode {
+    background-color: var(--primary-color);
 }
 
 #stopBtn {
